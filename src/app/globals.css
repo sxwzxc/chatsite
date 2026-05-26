@@ -1,192 +1,134 @@
 @import "tailwindcss";
 
 /* ============================================
-   ChatSite - 聊天室全局样式
-   主题：深色 + 绿色强调色
+   ChatSite — 聊天室全局样式
+   主题：深色 #0a0a0f + 翡翠绿强调色
    ============================================ */
 
 :root {
-  /* 基础颜色 */
-  --background: #0a0a0a;
-  --foreground: #ececf1;
-  --card: #141414;
-  --card-foreground: #ececf1;
-  --popover: #1a1a1a;
-  --popover-foreground: #ececf1;
-  --primary: #22c55e;
-  --primary-foreground: #ffffff;
-  --secondary: #1a1a2e;
-  --secondary-foreground: #a1a1aa;
-  --muted: #1a1a1a;
-  --muted-foreground: #6b6b80;
-  --accent: #1a2e1a;
-  --accent-foreground: #22c55e;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #1f1f2e;
-  --input: #1f1f2e;
-  --ring: #22c55e;
-
-  --radius: 0.5rem;
-
-  /* 聊天室专用色 */
-  --chat-bg: #0a0a0a;
-  --chat-sidebar: #111111;
-  --chat-input: #1a1a1a;
-  --chat-bubble-self: #22c55e;
-  --chat-bubble-other: #1e1e2e;
-  --chat-system: #6b6b80;
+  --chat-bg: #0a0a0f;
+  --chat-surface: #0f0f14;
+  --chat-border: rgba(255, 255, 255, 0.05);
+  --chat-accent: #22c55e;
+  --chat-accent-dark: #16a34a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-background: var(--chat-bg);
+  --color-foreground: #ececf1;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 }
 
 /* ============================================
-   Base Styles
+   Base
    ============================================ */
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: var(--chat-bg);
-  color: var(--foreground);
+  color: #ececf1;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   overflow: hidden;
   height: 100vh;
 }
 
 /* ============================================
-   自定义滚动条
+   Scrollbar
    ============================================ */
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
 
 /* ============================================
-   聊天室动画
+   Animations
    ============================================ */
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes pulse-online {
+@keyframes pulse-soft {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50%      { opacity: 0.5; }
 }
 
-@keyframes typing-dot {
+@keyframes bounce-dot {
   0%, 60%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-6px); }
+  30%            { transform: translateY(-4px); }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.3s ease-out;
+  animation: fade-in 0.25s ease-out;
 }
 
-.animate-slide-in {
-  animation: slide-in-right 0.3s ease-out;
+.animate-fade-in-up {
+  animation: fade-in-up 0.35s ease-out;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
 }
 
 /* ============================================
-   聊天消息气泡样式
+   Message bubble helpers
    ============================================ */
 
 .message-bubble-self {
-  background: var(--chat-bubble-self);
+  background: linear-gradient(135deg, #22c55e 0%, #14b8a6 100%);
   color: white;
-  border-radius: 16px 16px 4px 16px;
+  border-radius: 18px 18px 4px 18px;
+  box-shadow: 0 2px 12px rgba(34, 197, 94, 0.15);
 }
 
 .message-bubble-other {
-  background: var(--chat-bubble-other);
-  color: var(--foreground);
-  border-radius: 16px 16px 16px 4px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #ececf1;
+  border-radius: 18px 18px 18px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .message-bubble-system {
-  background: transparent;
-  color: var(--chat-system);
-  font-size: 12px;
   text-align: center;
-  padding: 4px 0;
+  font-size: 11px;
+  color: #52525b;
+  padding: 6px 0;
 }
 
 /* ============================================
-   在线状态指示灯
-   ============================================ */
-
-.online-dot {
-  width: 8px;
-  height: 8px;
-  background: #22c55e;
-  border-radius: 50%;
-  animation: pulse-online 2s infinite;
-}
-
-/* ============================================
-   打字动画点
+   Typing dots
    ============================================ */
 
 .typing-dot {
   display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: #6b6b80;
+  width: 5px;
+  height: 5px;
+  background: #52525b;
   border-radius: 50%;
-  animation: typing-dot 1.2s infinite;
+  animation: bounce-dot 1.2s infinite;
 }
-
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
 
 /* ============================================
-   文件卡片
+   Chat input auto-resize
+   ============================================ */
+
+.chat-input {
+  resize: none;
+  field-sizing: content;
+}
+
+/* ============================================
+   File card
    ============================================ */
 
 .file-card {
@@ -196,19 +138,18 @@ body {
   padding: 8px 12px;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: all 0.2s;
-  max-width: 240px;
+  transition: all 0.15s ease;
+  max-width: 220px;
 }
-
 .file-card:hover {
-  background: rgba(34, 197, 94, 0.1);
-  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.25);
 }
 
 /* ============================================
-   侧边栏用户列表
+   User item in sidebar
    ============================================ */
 
 .user-item {
@@ -217,41 +158,39 @@ body {
   gap: 8px;
   padding: 6px 12px;
   border-radius: 6px;
-  transition: background 0.2s;
-  cursor: default;
+  transition: background 0.15s ease;
 }
-
 .user-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* ============================================
-   输入框自动调整
+   Online dot
    ============================================ */
 
-.chat-input {
-  resize: none;
-  field-sizing: content;
-  max-height: 120px;
+.online-dot {
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse-soft 2s infinite;
+  flex-shrink: 0;
 }
 
 /* ============================================
-   响应式布局
+   Sidebar slide (mobile)
    ============================================ */
 
 @media (max-width: 768px) {
-  .chat-sidebar {
+  .sidebar-mobile {
     position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
+    left: 0; top: 0; bottom: 0;
     width: 260px;
     z-index: 50;
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-
-  .chat-sidebar.open {
+  .sidebar-mobile.open {
     transform: translateX(0);
   }
 }
